@@ -1,0 +1,32 @@
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href ng-click="selectedTab('/admin/user');">News</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li ng-class="{'active':toggleActive === '/admin/user' || toggleActive === '/admin'}" ng-click="selectedTab('/admin/user');"><a href>Người Dùng</a></li>
+        <li ng-class="{'active':toggleActive === '/admin/category'}" ng-click="selectedTab('/admin/category');"><a href>Chuyên Mục</a></li>        
+        <li ng-class="{'active':toggleActive === '/admin/post'}" ng-click="selectedTab('/admin/post');"><a href>Bài Viết</a></li>
+      </ul>
+      <form class="navbar-form navbar-left" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Filter" ng-model="s" ng-change="searchText(s)">
+        </div>
+      </form>
+      <ul class="nav navbar-nav navbar-right">
+          <li><a href ng-if="isLogin" ng-click="logout()">Logout</a></li>
+          <li><a ng-if="!isLogin" ng-href="{{ link('admin/login') }}">Login</a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>

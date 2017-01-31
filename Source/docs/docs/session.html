@@ -1,0 +1,44 @@
+<h3 class="page-header">Session</h3>
+<p>
+	Session là thành phần không thể thiếu trong bất kỳ ứng dụng nào có sử dụng bộ nhớ tạm dành cho việc Đăng nhập, lưu trữ dữ liệu trên Server. Thư viện Session này sẽ giúp các bạn đơn giản hóa các thao tác với Session hơn bao giờ hết, với những phương thức đặt tên dễ hiểu là một lợi thế khi sử dụng.
+</p>
+<h3>Các phương thức cần biết</h3>
+<ul>
+	<li><a ng-click="goto('get')" href><span class="code-inline">Session::get()</span></a> : lấy dữ liệu từ Session</li>
+	<li><a ng-click="goto('insert')" href><span class="code-inline">Session::insert()</span></a> : thêm dữ liệu vào Session có sẵn</li>
+	<li><a ng-click="goto('insert')" href><span class="code-inline">Session::update()</span></a>: cập nhật Session, bỏ qua dữ liệu có sẵn</li>
+	<li><a ng-click="goto('destroy')" href><span class="code-inline">Session::destroy()</span></a> : xóa Session</li>
+</ul>
+<h3 id="get">Lấy dữ liệu từ Session</h3>
+<pre>
+	<code class="php">
+		// Trả về dữ liệu nếu tồn tại dữ liệu và 'false' khi không có dữ liệu chỉ định
+		Session:get('key') 
+	</code>
+</pre>
+<h3 id="insert">Insert và Update vào Session</h3>
+<p class="alert alert-warning">Các bạn cần lưu ý giữa Insert và Update. <span class="code-inline">Session::insert($key, $dataArray)</span> dùng để thêm tuần tự dữ liệu vào bên trong dữ liệu Array trước đó (Dữ liệu phải là một Array). Trong khi <span class="code-inline">Session::update($key, $data)</span> không cần phân biệt Array, String hay Object đều có thể lưu dữ liệu vào, tuy nhiên nếu có tồn tại dữ liệu trước đó thì sẽ bị ghi đè.</p>
+<pre>
+	<code class="php">
+		// Cẩn trọng khi sử dụng Session::insert()
+		Session::insert('user', [
+		    'id' => $user['id'],
+		    'email' => $user['email'],
+		    'level' => $user['level']
+		]);
+
+		// Session::update() được khuyến khích sử dụng hơn
+		Session::update('user', [
+		    'id' => $user['id'],
+		    'email' => $user['email'],
+		    'level' => $user['level']
+		]);
+	</code>
+</pre>
+<h3 id="destroy">Hủy bỏ Session</h3>
+<pre>
+	<code class="php">
+		// Xóa bỏ toàn bộ dữ liệu trong Session
+		Session::destroy();
+	</code>
+</pre>

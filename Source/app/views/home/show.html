@@ -1,0 +1,13 @@
+<div class="row" ng-if="post">
+	<div class="col-md-12">
+		<h1 class="page-header">{{ post.title }}</h1>
+		<p>Ngày đăng: {{ post.date }}</p>
+		<p class="well" ng-bind-html="post.intro"></p>
+		<p ng-bind-html="post.content"></p>
+	</div>
+</div>
+<div class="row" ng-if="!post">
+	<div class="col-md-12">
+		Không có dữ liệu
+	</div>
+</div>

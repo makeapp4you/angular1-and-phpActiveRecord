@@ -1,0 +1,17 @@
+<a ng-href="{{ link('admin/category') }}" class="btn btn-primary"><span class="glyphicon glyphicon-list"></span> Danh sách chuyên mục</a>
+<div class="alert alert-danger" ng-if="errors.length">
+  <ul>
+    <li ng-repeat="error in errors">{{ error }}</li>
+  </ul>
+</div>
+<form>
+    <div class="form-group">
+        <label for="name">Tên chuyên mục</label>
+        <input type="text" class="form-control" id="name" placeholder="Nhập chuyên mục" ng-model="input.name">
+    </div>
+    <div class="form-group">
+        <label for="order">Thứ tự ưu tiên</label>
+        <input type="number" class="form-control" id="order" placeholder="Nhập Thứ tự ưu tiên" ng-model="input.order">
+    </div>    
+    <button type="submit" class="btn btn-primary" ng-click="create(input)">Tạo</button>
+</form>

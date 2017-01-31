@@ -1,0 +1,275 @@
+<h3 class="page-header">PHP Active Record</h3>
+<p>
+	Thư viện PHP Active Record được sáng lập bởi các thành viên <a href="http://github.com/cvanschalkwijk" target="_blank">Clay vanSchalkwijk</a>, <a href="http://github.com/jpfuentes2" target="_blank">Jacques Fuentes</a> và <a href="http://github.com/kla" target="_blank">Kien La</a>. Giúp cho lập trình viên tương tác với CSDL dễ dàng hơn, thay vì phải tự tạo cho mình thư viện để sử dụng. Được tích hợp vào Framework này phục vụ cho công việc học tập của học viên QHOnline.
+</p>
+<p>Website: <a href="http://www.phpactiverecord.org">http://www.phpactiverecord.org</a></p>
+<h3>Các kiến thức cần biết</h3>
+<div class="row">
+	<div class="col-md-8">
+		<ul>
+			<li>Để có thể tiếp nhận thư viện này, các bạn ít nhất phải biết qua OOP (Lập trình hướng đối tượng) để sử dụng được dễ dàng và đỡ phải bỡ ngỡ với các cú pháp trong thư viện hơn. Thư viện đã cung cấp rất đẩy đủ cho chúng ta các kiến thức cần và đủ để có thể tạo lập CSDL như ý muốn của mình. Đáp ứng đầy đủ các điều kiện tối thiểu của một ứng dụng CRUD (Create-Read-Update-Delete). </li>
+			<li>Ngoài ra thư viện còn cung cấp cho các bạn các tài liệu về kết bảng và cách đặt tên cơ sở dữ liệu một cách tự động hóa, giúp đơn giản rất nhiều thao tác.</li>
+		</ul>
+	</div>
+	<div class="col-md-4">
+		<ul class="list-group">
+			<li class="list-group-item"><a ng-click="goto('install')" href>Install</a></li>
+			<li class="list-group-item"><a ng-click="goto('models')" href>Models</a></li>
+			<li class="list-group-item"><a ng-click="goto('crud')" href>Create-Read-Update-Delete</a></li>
+			<li class="list-group-item"><a ng-click="goto('finders')" href>Finders</a></li>
+			<li class="list-group-item"><a ng-click="goto('associations')" href>Associations</a></li>
+		</ul>
+	</div>
+</div>
+<h3 id="install">Install</span></h3>
+<pre>
+	<code class="php">
+		ActiveRecord\Config::initialize(function($cfg) {
+			$cfg->set_model_directory('/path/to/your/model_directory');
+			$cfg->set_connections(array('development' =>
+			'mysql://username:password@localhost/database_name'));
+		});
+	</code>
+</pre>
+<p class="alert alert-info">Các bạn chú ý, thư viện hỗ trợ chúng ta 3 loại connection là <span class="code-inline">development</span>, <span class="code-inline">production</span> và <span class="code-inline">test</span></p>
+<h3 id="models">Models</span></h3>
+<p>Nếu như các bạn từng học qua Design Pattern MVC thì chắc hẳn cũng sẽ không lạ lẫm với Models. Có nhiệm vụ tương tác với CSDL, giúp chúng ta nhanh chóng thêm, xóa, sửa và đọc dữ liệu một cách dễ dàng.</p>
+<h4>Theo chuẩn của PHPActiveRecord</h4>
+<pre>
+	<code class="php">
+		// Tên của Model sẽ là số ít trong tiếng Anh.
+		// Tên của Table sẽ là số nhiều của tên Model.
+		class Post extends ActiveRecord\Model {
+
+		}		
+	</code>
+</pre>
+<h4>Không theo chuẩn của PHPActiveRecord</h4>
+<p>Trong trường hợp nào đó, nếu như nhu cầu của các bạn không muốn tên Table của chúng ta tự động như PHPActiveRecord hoặc PHPActiveRecord chạy không chính xác. Các bạn có thể dùng cách sau để ghi đè các thiết lập mặc định.</p>
+<pre>
+	<code class="php">
+		class Book extends ActiveRecord\Model {
+			// Tên Table mà bạn muốn đặt
+			static $table_name = 'my_book';
+
+			// Khóa chính của bạn nếu như khác mặc định là "id"
+			static $primary_key = 'book_id';
+
+			// Connection mà bạn muốn lựa chọn
+			static $connection = 'development';
+
+			// Tên Database sẽ được triệu gọi theo format sau => my_db.my_book
+			static $db = 'my_db';
+		}	
+	</code>
+</pre>
+<h3 id="crud">Create-Read-Update-Delete</h3>
+<p>Nếu đã sử dụng Active Record thì không thể không nhắc tới hệ thống CRUD. Điều mà chúng ta gần như bắt buộc phải xây dựng với các ứng dụng tương tác với người dùng.</p>
+<h4>Create</h4>
+<pre>
+	<code class="php">	
+		$post = new Post();
+		$post->title = 'My first blog post!!';
+		$post->author_id = 5;
+		$post->save();		
+		
+		// Cách khác để thêm dữ liệu
+		$attributes = array('title' => 'My first blog post!!', 'author_id' => 5);
+		$post = new Post($attributes); 
+		$post->save();
+
+		// Lại một cách khác nữa
+		$attributes = array('title' => 'My first blog post!!', 'author_id' => 5);
+		$post = Post::create($attributes);			
+
+		// Câu truy vấn của 3 cách trên là như nhau
+		// INSERT INTO `posts` (title,author_id) VALUES('My first blog post!!', 5)
+	</code>
+</pre>
+<h4>Read</h4>
+<pre>
+	<code class="php">
+		// SELECT * FROM `posts` where id = 1
+		$post = Post::find(1);
+		echo $post->title; # 'My first blog post!!'
+		echo $post->author_id; # 5
+
+		
+		// Lấy dữ liệu đầu tiên xuất hiện trong Table
+		$post = Post::first();
+		
+		// Lấy dữ liệu linh hoạt dựa vào column "name" hoặc "id" trong Table
+		$post = Post::find_by_name('The Decider');
+		$post = Post::find_by_name_and_id('The Bridge Builder',100);
+		$post = Post::find_by_name_or_id('The Bridge Builder',100);
+		
+		// Sử dụng điều kiện để lấy dữ liệu
+		$posts = Post::find('all',array('conditions' => array('name=?','The Bridge Builder')));
+	</code>
+</pre>
+<h4>Update</h4>
+<pre>
+	<code class="php">	
+		$post = Post::find(1);
+		echo $post->title; # 'My first blog post!!'
+		$post->title = 'Some real title';
+		$post->save();
+		// UPDATE `posts` SET title='Some real title' WHERE id=1
+		
+		//Cách khác để cập nhật dữ liệu
+		$post = Post::find(1);
+		$post->update_attributes(array('title' => 'Some other title', 'author_id' => 1));
+		# UPDATE `posts` SET title='Some other title', author_id=1 WHERE id=1
+	</code>
+</pre>
+<h4>Delete</h4>
+<pre>
+	<code class="php">	
+		$post = Post::find(1);
+		$post->delete();
+		# DELETE FROM `posts` WHERE id=1
+
+		echo $post->title; // Vẫn có thể lấy dữ liệu dù nó đã bị xóa bên trên
+	</code>
+</pre>
+<p class="alert alert-info">Khi các bạn xóa dữ liệu thì PHPActiveRecord chỉ xóa dữ liệu của bạn trong Table, nhưng Object trong PHP vẫn giữ nguyên. Vì thế bạn vẫn có thể truy cập vào dữ liệu như bình thường.</p>
+<h4>Update và Delete hàng loạt</h4>
+<pre>
+	<code class="php">	
+ 		// Cập nhật hàng loạt
+ 		// Model::table()->update(AttributesToUpdate, WhereToUpdate);
+ 		Post::table()->update(array('title' => 'Massive title!', /* các thuộc tính tương đương với tên column... */, array('id' => array(1, 3, 7));
+ 		// UPDATE `posts` SET title = `Massive title!` WHERE id IN (1, 3, 7)
+ 		
+ 		// MASSIVE DELETE
+ 		// Model::table()->delete(WhereToDelete);
+ 		Post::table()->delete(array('id' => array(5, 9, 26, 30));
+ 		// DELETE FROM `posts` WHERE id IN (5, 9, 26, 30)
+	</code>
+</pre>
+<p class="alert alert-info">Trong Update hàng loạt các bạn lưu ý Array cuối cùng cũng là <span class="code-inline">phần tử cuối cùng</span> của Array lớn nhất chứa <span class="code-inline">id</span> các bài viết cần cập nhật.</p>
+<h3 id="finders">Finders</span></h3>
+<p>Ở các ví dụ trước trong CRUD. Các bạn thấy họ sử dụng khá nhiều phương thức <span class="code-inline">TenModel::find(id)</span> để tìm dữ liệu theo <span class="code-inline">id</span> một cách dễ dàng. Chúng ta sẽ cùng tìm hiểu thêm một số tính năng khác trong Finders cũng không kém phần thú vị và hữu ích.</p>
+<h4>Các phương thức đầy đủ và ghi tắt</h4>
+<pre>
+	<code class="php">
+		Book::find('all');
+		Book::find('last');
+		Book::first();
+		Book::last();
+		Book::all();
+	</code>
+</pre>
+<h4>Tìm kiếm có điều kiện</h4>
+<p>Việc sử dụng tìm kiếm dữ liệu trong PHPActiveRecord đã được chống SQL Injection nên các bạn đỡ phải lo lắng một phần về vấn đề bảo mật.</p>
+<pre>
+	<code class="php">
+		// Tìm kiếm quyển sách có giá nhỏ hơn 15$
+		Book::all(array('conditions' => array('price < ?', 15.00)));
+		// SELECT * FROM `books` WHERE price < 15.00
+		
+		// Tìm kiếm thể loại 'Romance'
+		Book::find('all', array('conditions' => array('genre = ?', 'Romance')));
+		// SELECT * FROM `books` WHERE genre = 'Romance'
+		
+		// Tìm kiếm các tác giả có ID là 1,2,3
+		Book::find('all', array('conditions' => array('author_id in (?)', array(1,2,3))));
+		// SELECT * FROM `books` WHERE author_id in (1,2,3)
+		
+		// Tìm kiếm thể loại 'Romance' có giá nhỏ hơn 15$
+		Book::all(array('conditions' => array('genre = ? AND price < ?', 'Romance', 15.00)));
+		// SELECT * FROM `books` WHERE genre = 'Romance' AND price < 15.00
+	</code>
+</pre>
+<h4>Limit - Giới hạn kết quả</h4>
+<pre>
+	<code class="php">
+		// Tìm tất cả quyển sách nhưng chỉ trả về 10 cuốn
+		Book::find('all', array('limit' => 10));
+		// SELECT * FROM `books` LIMIT 0,10
+		
+		// Tìm quyển sách bắt đầu từ cuốn thứ 6 (Offset bắt đầu từ 0) và chỉ trả về 10 cuốn
+		Book::find('all', array('limit' => 10, 'offset' => 5));
+		// SELECT * FROM `books` LIMIT 5,10
+	</code>
+</pre>
+<h4>Order - Thư tự ưu tiên</h4>
+<pre>
+	<code class="php">
+		// Ưu tiên các cuốn sách có tên giảm dần trong Alphabet
+		Book::find('all', array('order' => 'title desc'));
+		// SELECT * FROM `books` ORDER BY title desc
+		
+		// Tìm quyển sách có giá giảm dần nhưng tên được xếp theo thứ tự tăng dần trong Alphabet
+		Book::find('all', array('order' => 'price desc, title asc'));
+		// SELECT * FROM `books` ORDER BY price desc, title asc
+	</code>
+</pre>
+<h3 id="associations">CSDL Quan hệ</h3>
+<p class="alert alert-info">Việc hỗ trợ quan hệ trong CSDL giúp cho PHPActiveRecord không thể còn gì tuyệt vời hơn. Tuy sức mạnh có phần hạn chế nhưng vẫn đủ để các lập trình viên sử dụng trong các ứng dụng có quy mô vừa và nhỏ.</p>
+<h4>Has Many (1-n)</h4>
+<pre>
+	<code class="php">
+		// Kết bảng đơn giản
+		class Category extends ActiveRecord\Model {
+		  static $has_many = array(
+		    array('posts')
+		  );
+		}
+
+		// Kết bảng kèm điều kiện
+		class Category extends ActiveRecord\Model {
+		  static $has_many = array(
+		    array('posts', 'conditions' => array('publish = ?' => array(1)))
+		  );
+		}
+	</code>
+</pre>
+<h4>Belongs To (1-1)</h4>
+<pre>
+	<code class="php">
+		// Kết bảng đơn giản
+		class Post extends ActiveRecord\Model {
+		  static $belongs_to = array(
+		    array('category')
+		  );
+		}
+
+		// Kết bảng kèm điều kiện
+		class Post extends ActiveRecord\Model {
+		  static $belongs_to = array(
+		    array('category', 'conditions' => array('accept_posts = ?' => array(1)))
+		  );
+		}
+	</code>
+</pre>
+<h4>Many to Many (n-n)</h4>
+<p>Quan hệ này tương đối khó, vì nó sẽ sinh ra một bảng trung gian (Pivot Table). Ở đây giả sử chúng ta có 2 Table là <span class="code-inline">post</span> và <span class="code-inline">category</span> sẽ sinh ra bảng trung gian là <span class="code-inline">packages</span>. Một bài viết có nhiều chuyên mục và ngược lại.</p>
+<pre>
+	<code class="php">
+		class Post extends ActiveRecord\Model {
+			static $has_many = array(
+				array('packages'),
+				array('categories', 'through' => 'packages')
+			);
+		}
+
+		class Package extends ActiveRecord\Model {
+			static $belongs_to = array(
+				array('post'),
+				array('category')
+			);
+		}
+
+		class Category extends ActiveRecord\Model {
+			static $has_many = array(
+				array('packages'),
+				array('posts', 'through' => 'packages')
+			);
+		}
+
+		$post = Post::first();
+		// Truy cập trực tiếp vào Category
+		print_r($post->categories);
+	</code>
+</pre>

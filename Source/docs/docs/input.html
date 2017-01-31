@@ -1,0 +1,37 @@
+<h3 class="page-header">Input</h3>
+<p>
+	Thư viện Input này được viết để nhận lại những dữ liệu được gửi lên từ người dùng đã được biến đổi phù hợp để chạy trên Web Application, cụ thể ở đây là AngularJS. Thư viện này sử dụng các phương thức có tên rất thân thiện và dễ xài hơn cách xài trực tiếp biến môi trường như <span class="code-inline">$_GET</span> hay <span class="code-inline">$_POST</span>.
+</p>
+<h3>Các phương thức cần biết</h3>
+<ul>
+	<li><a ng-click="goto('isGet')" href><span class="code-inline">Input::isGet()</span></a> : kiểm tra Request có phải <span class="code-inline">GET</span> hay không</li>
+	<li><a ng-click="goto('isExists')" href><span class="code-inline">Input::isExists()</span></a> : kiểm tra biến có tồn tại phần tử hay thuộc tính trong Array hoặc Object</li>
+	<li><a ng-click="goto('get')" href><span class="code-inline">Input::get()</span></a>: lấy dữ liệu chỉ định hoặc tất cả từ biến môi trường</li>	
+</ul>
+<h3 id="isGet">Kiểm tra Request <span class="code-inline">GET</span></h3>
+<pre>
+	<code class="php">
+		// 'true' nếu $_SERVER['REQUEST_METHOD'] == 'GET' và ngược lại là 'false'
+		Input::isGet();
+	</code>
+</pre>
+<h3 id="isExists">Kiểm tra biến</h3>
+<p class="alert alert-warning">Đây là cách viết ngắn gọn hơn thay vì cú pháp <span class="code-inline">isset($data['abc']) && !empty($data['abc'])</span> và tương ứng với Object thì trong phương thức này sẽ đảm nhiệm luôn cho các bạn.</p>
+<pre>
+	<code class="php">
+		// 'true' nếu $user có tồn tại phần tử hay thuộc tính 'email'
+		// 'false' nếu không tìm thấy
+		Input::isExists($user, 'email');
+	</code>
+</pre>
+<h3 id="get">Lấy dữ liệu từ Request</h3>
+<p class="alert alert-info">Điều thú vị là trong <span class="code-inline">Input::get('key')</span> đã hỗ trợ các bạn kiểm tra giá trị có rỗng hay chưa. Nên vì thế các bạn sẽ nhận lại dữ liệu khi nó không rỗng và sẽ nhận giá trị <span class="code-inline">false</span> khi nó rỗng.</p>
+<pre>
+	<code class="php">
+		//Lấy dữ liệu chỉ định tương tự như $_GET['user'] hay $_POST['user']
+		Input::get('user'); 
+
+		//Lấy toàn bộ dữ liệu được gửi
+		Input::get();
+	</code>
+</pre>

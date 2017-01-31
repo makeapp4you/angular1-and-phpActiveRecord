@@ -1,0 +1,44 @@
+<div class="row" ng-repeat="post in posts" ng-if="$index % 2 === 0">
+	<div class="col-md-6">
+		<div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><a ng-href="{{ link('show/') + posts[$index].id + '/' + posts[$index].slug }}">{{ posts[$index].title }}</a></h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <img ng-src="{{ posts[$index].image }}" alt="{{ posts[$index].title }}" class="img-responsive"/>
+                    </div>
+                    <div class="col-md-9">
+                        <p><strong>{{ posts[$index].category }}</strong></p>      
+                        <p>{{ posts[$index].intro }}</p>                  
+                    </div>
+                </div>
+            </div>
+        </div>
+	</div>
+	<div class="col-md-6" ng-if="posts[$index + 1]">
+		<div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><a ng-href="{{ link('show/') + posts[$index + 1].id + '/' + posts[$index + 1].slug }}">{{ posts[$index + 1].title }}</a></h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <img ng-src="{{ posts[$index + 1].image }}" alt="{{ posts[$index + 1].title }}" class="img-responsive"/>
+                    </div>
+                    <div class="col-md-9">
+                        <p><strong>{{ posts[$index + 1].category }}</strong></p>      
+                        <p>{{ posts[$index + 1].intro }}</p>                  
+                    </div>
+                </div>
+            </div>
+        </div>
+	</div>
+</div>
+<div class="row text-center" ng-bind-html="pagination"></div>
+<div class="row" ng-if="!posts">
+	<div class="col-md-12">
+		Không có dữ liệu
+	</div>
+</div>

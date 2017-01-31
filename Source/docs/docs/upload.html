@@ -1,0 +1,33 @@
+<h3 class="page-header">Upload</h3>
+<p>
+	Thư viện Upload giúp bạn có thể đơn giản hóa công việc Upload lên Server. Tuy nhiên, thư viện này được phát triển theo dạng "mì ăn liền" nên vì vậy không có những chức năng tinh chỉnh dành riêng cho lập trình viên. Lập trình viên có thể tự mình tạo ra thư viện Upload khác tốt hơn.
+</p>
+<h3>Các phương thức cần biết</h3>
+<ul>
+	<li><a ng-click="goto('get')" href><span class="code-inline">Upload::setMimes($mimesArray)</span></a> : thiết lập các chuẩn file được cho phép Upload</li>
+	<li><a ng-click="goto('all')" href><span class="code-inline">Upload::verify($file)</span></a> : kiểm duyệt file Upload</li>
+	<li><a ng-click="goto('all')" href><span class="code-inline">Upload::put($file, $destination)</span></a>: đặt file Upload vào thư mục chứa file</li>
+</ul>
+<h3 id="install">Hướng dẫn chung</span></h3>
+<pre>
+	<code class="php">
+		$files = $_FILES;
+		foreach ($files as $file) {
+		    $verify = Upload::verify($file);
+		    if ($verify !== true) {
+		        switch ($verify) {
+		            case 'maxsize':
+		                $data['errors'][] = 'Dung lượng quá mức cho phép';
+		                break;
+		            case 'mimes':
+		                $data['errors'][] = 'Định dạng không cho phép';
+		                break;
+		        }
+		    }
+		    if (!$data['errors']) {
+		        $url = Upload::put($file, '../uploads');
+		        echo $url;
+		    }
+		}
+	</code>
+</pre>

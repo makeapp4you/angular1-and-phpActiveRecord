@@ -1,0 +1,44 @@
+<a ng-href="{{ link('admin/post') }}" class="btn btn-primary"><span class="glyphicon glyphicon-list"></span> Danh sách bài viết</a>
+<div class="alert alert-danger" ng-if="errors.length">
+  <ul>
+    <li ng-repeat="error in errors">{{ error }}</li>
+  </ul>
+</div>
+<form>
+    <div class="form-group">
+        <label for="title">Tên bài viết</label>
+        <input type="text" class="form-control" id="title" placeholder="Nhập bài viết" ng-model="input.title">
+    </div>
+    <div class="form-group">
+        <label for="intro">Mô tả</label>
+        <textarea ng-model="input.intro" class="form-control" id="intro"></textarea>
+    </div>
+    <div class="form-group">
+        <label for="content">Nội dung</label>
+        <div tinymce lazy-load="http://localhost/angularjs/training/app/scripts/js/tinymce/tinymce.min.js" selector="#text-editor" callback="loadTinyMCE()">
+            <textarea id="text-editor" class="form-control"></textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="category">Chuyên mục</label>
+        <select class="form-control" ng-model="input.category" ng-options="category.name for category in categories" id="category">
+            <option value="">Hãy chọn bài viết</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="image">Hình ảnh</label>
+        <div>
+            <button ngf-select ngf-change="upload($file)" type="button" class="btn btn-warning">Chọn hình ảnh</button>
+        </div>
+        <div class="progress" ng-if="progress">
+            <div class="progress-bar" ng-style="{width: progress + '%'}" ng-class="{'progress-bar-success': progress === 100 && fileError === false, 'progress-bar-danger': fileError}">
+                <p ng-if="progress !== 100">{{ progress }}%</p>
+                <p ng-if="progress === 100">{{ fileName || 'Đang xử lý...' }}</p>
+            </div>
+        </div>
+        <p>
+            <img ng-if="fileTemp" ng-src="{{ fileTemp }}" alt="Thumbnail" class="img-responsive img-thumbnail">
+        </p>
+    </div>
+    <button type="submit" class="btn btn-primary" ng-click="create(input)">Tạo</button>
+</form>

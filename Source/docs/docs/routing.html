@@ -1,0 +1,115 @@
+<h3 class="page-header">Routing</h3>
+<p>
+	Routing dùng để điều hướng địa chỉ đến Website đến hệ thống để thực hiện công việc nào đó. Routing là kĩ thuật được ưa chuộng hiện nay ở các PHP Framework lớn, nó dần thay thế cho Htaccess vì những cú pháp khó nhằn. Nhưng đến với Routing, việc viết lại đường dẫn (Rewrite Url) dễ hơn bao giờ hết.
+</p>
+<h3>Các phương thức cần biết</h3>
+<ul>
+	<li><a ng-click="goto('get')" href><span class="code-inline">Route::get()</span></a> : được dùng với Request <span class="code-inline">GET</span></li>
+	<li><a ng-click="goto('all')" href><span class="code-inline">Route::post()</span></a> : được dùng với Request <span class="code-inline">POST</span></li>
+	<li><a ng-click="goto('all')" href><span class="code-inline">Route::put()</span></a>: được dùng với Request <span class="code-inline">PUT</span></li>
+	<li><a ng-click="goto('all')" href><span class="code-inline">Route::patch()</span></a> : được dùng với Request <span class="code-inline">PATCH</span></li>
+	<li><a ng-click="goto('all')" href><span class="code-inline">Route::delete()</span></a> : được dùng với Request <span class="code-inline">DELETE</span></li>
+	<li><a ng-click="goto('any')" href><span class="code-inline">Route::any()</span></a> : được dùng với tất các dạng Request</li>
+</ul>
+<h3>Routing với Anonymous Function|Closure</h3>
+<p>Ví dụ, các bạn cần một đường dẫn đến Website như sau <span class="code-inline">http://localhost/hello</span>. Và các bạn muốn rằng nó sẽ xuất hiện khi dùng phương thức <span class="code-inline">GET</span> thông thường</p>.
+<h4 id="get">Anonymous Function - <span class="code-inline">GET</span></h4>
+<pre>
+	<code class="php">
+		// http://localhost/hello
+		Route::get('hello', function() {
+		    echo 'Hello World'; // Hello World
+		});		
+	</code>
+</pre>
+<h4>Closure - <span class="code-inline">GET</span></h4>
+<pre>
+	<code class="php">
+		$abc = 1234;
+		// http://localhost/hello
+		Route::get('hello', function() use ($abc) { 
+			echo $abc; // 1234
+		});
+	</code>
+</pre>
+<h3 id="all">Các phương thức khác <span class="code-inline">POST|PUT|PATCH|DELETE</span></h3>
+<pre>
+	<code class="php">
+		// POST Method
+		// http://localhost/hello
+		Route::post('hello', function() {
+		    echo 'Post'; // Post
+		});
+
+		// PUT Method
+		// http://localhost/hello
+		Route::put('hello', function() {
+		    echo 'Put';	// Put	    
+		});
+
+		// PATCH Method
+		// http://localhost/hello
+		Route::patch('hello', function() {
+		    echo 'Patch'; // Patch		    
+		});
+
+		// DELETE Method
+		// http://localhost/hello
+		Route::delete('hello', function() {
+		    echo 'Delete'; // Delete		    
+		});
+	</code>
+</pre>
+<p class="alert alert-info">
+	Với từng phương thức trong Custom Framework, các bạn có thể viết ứng dụng theo chuẩn Restful Web Services phục vụ cho các Web Application một cách linh động hơn. Thay vì trước đây chúng ta cần phải viết đường dẫn cho phương thức <span class="code-inline">GET</span> hay <span class="code-inline">POST</span> riêng thì nay chúng ta có thể gộp tất các phương thức vào một đường dẫn duy nhất. Và nó vẫn sẽ chạy tốt khi chúng ta sử dụng các phương thức tương ứng để truyền vào Web Services.
+</p>
+<h3 id="any">Routing cho toàn bộ các phương thức</h3>
+<p>Trong một số trường hợp, chúng ta cần một đường dẫn chấp nhận toàn bộ các phương thức được truyền vào như <span class="code-inline">http://localhost/test</span>, các bạn có thể sử dụng cách sau.</p>
+<pre>
+	<code class="php">
+		Route::any('test', function() {
+		    return 'Testing'; // Testing
+		});
+	</code>
+</pre>
+<p>Hãy chạy các ứng dụng trên bằng kĩ thuật AJAX hoặc các kĩ thuật nào đó để bạn có thể truyền qua các phương thức tương ứng. Trong ví dụ này, chắc sẽ có vài bạn hơi ngờ ngợ vì tôi dùng <span class="code-inline">return</span> thay vì <span class="code-inline">echo</span> nhưng các bạn không cần lo về điều đó vì cả 2 đều sẽ chạy như nhau trong <span class="code-inline">Route</span> mà thôi.</p>
+<h3>Routing và Querystring</h3>
+<p>Để có thể sử dụng những giá trị truyền vào trên đường dẫn, các bạn cần phải viết Route cho từng trường hợp mà các bạn muốn lấy. Ví dụ chúng ta có 2 trường hợp sau <span class="code-inline">http://localhost/test/123</span> và <span class="code-inline">http://localhost/test/123/show</span> thì với mỗi trường hợp khác nhau khi phân cách các đối số bằng <span class="code-inline">/</span> các bạn phải viết <span class="code-inline">Route</span> cho nó.</p>
+<pre>
+	<code class="php">
+		// http://localhost/test/123
+		Route::any('test/{$id}', function($id) {
+		    return 'Test: '.$id; // Test: 123
+		});
+
+		// http://localhost/test/123/show
+		Route::any('test/{$id}/show', function($id) {
+		    return 'Show: '.$id; // Show: 123
+		});
+	</code>
+</pre>
+<h3>Routing và nhiều Querystring</h3>
+<pre>
+	<code class="php">
+		// http://localhost/test/123/show/QHOnline
+		Route::get('test/{$id}/show/{$title}', function($id, $title) {
+		    return 'Test: '. $id . ' - ' . $title; // Test: 123 - QHOnline
+		});
+	</code>
+</pre>
+<p>Với mỗi Querystring các bạn muốn truyền vào, các bạn cần dùng cú pháp <span class="code-inline">{$tenBienCanDat}</span> và nhớ khai báo lại trong <span class="code-inline">function</span>.</p>
+<h3>Routing và Controller</h3>
+<p>Custom Framework này còn hỗ trợ các bạn định nghĩa <span class="code-inline">Controller</span> trong thư mục <span class="code-inline">controllers</span> đi kèm trong Framework. Giả sử chúng ta có một <span class="code-inline">Controller</span> tên là <span class="code-inline">BaseController</span> thì tên file PHP của bạn cũng phải là <span class="code-inline">BaseController.php</span> và đặt trong thư mục mà tôi đã nói.</p>
+<pre>
+	<code class="php">
+		class BaseController {
+			public function hello() {
+				// Viết code tại đây
+			}
+		}
+
+		// http://localhost/hello
+		Route::get('hello', 'BaseController@hello');		
+	</code>
+</pre>
+<p>Trong đoạn ví dụ trên, chúng ta có chuỗi <span class="code-inline">BaseController@hello</span> tương ứng với tên của Controller <span class="code-inline">BaseController</span> và phương thức <span class="code-inline">hello()</span> sẽ được khởi chạy. Và cách truyền Querystring thì vẫn giống các ví dụ trên nhưng các bạn sẽ nhận nó ở phương thức <span class="code-inline">hello()</span>.</p>

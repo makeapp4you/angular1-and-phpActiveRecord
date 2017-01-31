@@ -1,0 +1,48 @@
+<h3 class="page-header">Tool</h3>
+<p>
+	Thư viện chứa nhiều chức năng hữu ích cho các bạn sau này khi xây dựng và phát triển Website. Bao gồm những chức năng như chuyển đổi ký tự Việt Nam thành ASCII hay lấy tên file Thumbnail có ký tự đặt trước <span class="code-inline">extension</span> và thư viện Pagination.
+</p>
+<h3>Các phương thức cần biết</h3>
+<ul>
+	<li><a ng-click="goto('thumbnail')" href><span class="code-inline">Tool::getThumbnail($filename)</span></a> : lấy tên file Thumbnail bao gồm chuỗi <span class="code-inline">_thumb</span></li>
+	<li><a ng-click="goto('redirect')" href><span class="code-inline">Tool::redirect($link)</span></a> : chuyển trang</li>
+	<li><a ng-click="goto('pagination')" href><span class="code-inline">Tool::pagination($totalPage, $perPage, $currentPage, $range, $linkCallback)</span></a>: thư viện Pagination</li>	
+	<li><a ng-click="goto('timestamp')" href><span class="code-inline">Tool::convertToTimestamp($time)</span></a>: chuyển đổi thời gian san Timestamp trong MySQL</li>	
+	<li><a ng-click="goto('ascii')" href><span class="code-inline">Tool::VNConvert($str)</span></a>: chuyển đổi ký tự Việt Nam sang ASCII</li>	
+</ul>
+<h3 id="thumbnail">Lấy tên file Thumbnail</span></h3>
+<pre>
+	<code class="php">
+		echo Tool::getThumbnail('demo.jpg'); // demo_thumb.jpg
+	</code>
+</pre>
+<h3 id="redirect">Chuyển trang</span></h3>
+<pre>
+	<code class="php">
+		Tool::redirect('http://example.com');
+	</code>
+</pre>
+<h3 id="pagination">Thư viện Pagination</h3>
+<p class="alert alert-warning">Thư viện này đòi hỏi bạn có kiến thức nhất định về Pagination như tính tổng số trang, lấy số trang hiện tại đang vào. Còn lại sẽ do thư viện sẽ tự động hết cho các bạn. Tuy nhiên đối số <span class="code-inline">$linkCallback</span> ít nhiều sẽ gây khó hiểu cho các bạn. Hãy thực hành qua ví dụ dưới đây nhé.</p>
+<pre>
+	<code class="php">		
+		Tool::pagination($totalPage, $perPage, $page, $range, function($currentPage) {
+			// Đối số mặc định $currentPage sẽ được trả về trong vòng lặp ẩn của thư viện Pagination
+			// Hàm này giúp các bạn viết lại đường dẫn cho link trả về của Pagination
+		    return sprintf('#/admin/category/page/%s', $currentPage);
+		});
+	</code>
+</pre>
+<h3 id="timestamp">Chuyển đổi thời gian sang Timestamp</span></h3>
+<pre>
+	<code class="php">
+		echo Tool::convertToTimestamp(time()); // 2015-08-01 10:20:30
+	</code>
+</pre>
+<h3 id="ascii">Chuyển đổi ký tự Việt Nam sang ASCII</h3>
+<p class="alert alert-info">Thư viện này hỗ trợ các bạn trong việc Rewrite URL của tiêu đề bài viết hay bất cứ chuỗi nào đó mà bạn không muốn nó có khoảng trống như tên hình ảnh, tên file.</p>
+<pre>
+	<code class="php">
+		echo Tool::VNConvert('Đây là chuỗi mẫu'); // day-la-chuoi-mau
+	</code>
+</pre>

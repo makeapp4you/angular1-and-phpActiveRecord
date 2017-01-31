@@ -1,0 +1,73 @@
+<h3 class="page-header">Application</h3>
+<p class="alert alert-danger">
+	Lưu ý: Đây là thành phần chính trong Custom Framework. Nó chưa rất nhiều phương thức để Framework này hoạt động. Nếu như, các bạn không cần thiết phải can thiệp vào Framework thì có thể tham khảo qua tài liệu này. Vì bên trong sẽ chứa các phương thức có thể sử dụng trực tiếp.
+</p>
+<h3>Các phương thức cần biết</h3>
+<ul>
+	<li><a ng-click="goto('startend')" href><span class="code-inline">App::start()</span></a> : khởi chạy ứng dụng</li>
+	<li><a ng-click="goto('startend')" href><span class="code-inline">App::end()</span></a> : kết thúc ứng dụng</li>
+	<li><a ng-click="goto('json')" href><span class="code-inline">App::toJSON($data)</span></a>: chuyển đổi dữ liệu trong JSON, hỗ trợ cả JSONP</li>
+	<li><a ng-click="goto('json')" href><span class="code-inline">App::getJSON($json)</span></a> : lấy dữ liệu từ JSON</li>
+	<li><a ng-click="goto('hash')" href><span class="code-inline">App::getHash()</span></a> : lấy chuỗi mã hóa bất kỳ</li>
+	<li><a ng-click="goto('hash')" href><span class="code-inline">App::encryptPassword($password)</span></a> : mã hóa mật khẩu</li>
+	<li><a ng-click="goto('hash')" href><span class="code-inline">App::verifyPassword($password, $dbPassword)</span></a> : xác nhận mật khẩu</li>
+	<li><a ng-click="goto('hash')" href><span class="code-inline">App::filter($routesArray, $callback)</span></a> : xác nhận mật khẩu</li>
+</ul>
+<h3 id="startend">Khởi tạo và kết thúc ứng dụng</h3>
+<p>Trong Custom Framework, để có thể chạy thì các bạn cần phải khai báo 2 phương thức <span class="code-inline">App::run()</span> và <span class="code-inline">App::end()</span>.</p>
+<pre>
+	<code class="php">
+		App::run();
+		..
+		..
+		// Route được đặt ở đây
+		..
+		..
+		App::end();
+	</code>
+</pre>
+<h3 id="json">Tương tác với JSON</h3>
+<p>Custom Framework này được tạo ra để tương tác với Web Application, vì thế không thể có sự thiếu vắng của các phương thức cần thiết về JSON. Hơn nữa, thư viện còn hỗ trợ các bạn tương tác với JSONP giúp cho việc lập trình của chúng ta rút ngắn thời gian và sẽ dễ dàng hơn.</p>
+<pre>
+	<code class="php">
+		// 'callback' là đối số mặc định giúp xác định Request là JSONP
+		// Nếu để trống đối số đấy thì sẽ tương tự json_encode()
+		App::toJson($data, 'callback'); 
+
+		// Đối số thứ 2 bằng 'true' sẽ trả về Array và 'false' sẽ là Object.
+		App::getJSON($json, true); 
+	</code>
+</pre>
+<h3 id="hash">Thư viện mã hóa</h3>
+<p>Đôi lúc, chắc hẳn các bạn cũng có nhu cầu sử dụng những chuỗi kí tự bất kỳ để để dánh dấu một sự kiện nào đó hay sử dụng các phương thức mã hóa mật khẩu để có thể lưu và lấy mật khẩu an toàn. Thì ngay ở đây các bạn sẽ làm được điều đó với những bước đơn giản.</p>
+<pre>
+	<code class="php">
+		// Chuỗi mã hóa bất kỳ
+		echo App::getHash(); // $1$aX@8cs#M$EOy4iALLAhg1/I0/0gcgS1
+
+		// Mã hóa mật khẩu
+		App::encryptPassword($password);
+
+		// Xác nhận mật khẩu nhập vào và mật khẩu trong CSDL
+		App::verifyPassword($passwordInput, $passwordInDatabase);
+
+	</code>
+</pre>
+<h3 id="filter">Filter</h3>
+<p>Khi chạy ứng dụng với Routing, đôi lúc chúng ta cần kiểm tra điều kiện nào đó của những Route được chỉ định. Để làm được điều đó, các bạn có thể sử dụng thư viện Filter sau. Với đối số thứ nhất là một Array chứa các tên Route được chỉ định, ngoài ra tên Route cũng hỗ trợ Regular Expression nên các bạn có thể xem ví dụ bên dưới.</p>
+<pre>
+	<code class="php">
+		App::filter(['islogin', 'user.*', 'category.*', 'post.*', 'upload.*'], function() {
+		    header('Content-Type: application/json');
+		    $data['errors'] = [];
+		    if (!User::isLogin()) {
+		        $data['isLogin'] = false;
+		        $data['errors'][] = 'Bạn không được phép truy cập';
+		        echo App::toJson($data);
+		        return false;
+		    }
+		    return true;
+		});
+	</code>
+</pre>
+<p class="alert alert-warning">Các bạn lưu ý, đối số thứ 2 của chúng ta phải được trả về <span class="code-inline">true</span> nếu không Filter sẽ chặn mọi hoạt động sau nó. Một điều quan trọng khác là Filter phải được đặt trên hầu hết các Route chịu sự ảnh hưởng của Filter.</p>

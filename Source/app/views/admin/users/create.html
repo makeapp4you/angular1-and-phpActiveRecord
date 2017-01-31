@@ -1,0 +1,28 @@
+<a ng-href="{{ link('admin/user') }}" class="btn btn-primary"><span class="glyphicon glyphicon-list"></span> Danh sách người dùng</a>
+<div class="alert alert-danger" ng-if="errors.length">
+  <ul>
+    <li ng-repeat="error in errors">{{ error }}</li>
+  </ul>
+</div>
+<form>
+    <div class="form-group">
+        <label for="email">Địa chỉ Email</label>
+        <input type="email" class="form-control" id="email" placeholder="Nhập Email" ng-model="input.email">
+    </div>
+    <div class="form-group">
+        <label for="password">Mật khẩu</label>
+        <input type="password" class="form-control" id="password" placeholder="Mật khẩu" ng-model="input.password">
+    </div>
+    <div class="form-group">
+        <label for="confirm_password">Nhập lại mật khẩu</label>
+        <input type="password" class="form-control" id="confirm_password" placeholder="Nhập lại mật khẩu" ng-model="input.confirm_password">
+    </div>
+    <div class="form-group">
+        <label for="level">Quyền hạn</label>
+        <select class="form-control" id="level" ng-model="input.level">
+            <option value="2">Thành viên</option>
+            <option value="1">Điều hành</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary" ng-click="create(input)">Tạo</button>
+</form>

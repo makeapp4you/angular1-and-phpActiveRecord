@@ -1,0 +1,51 @@
+<div class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Cảnh báo</h4>
+            </div>
+            <div class="modal-body">
+                <p>Bạn có chắc rằng là bạn muốn xóa không?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Dẹp ngay</button>
+                <button type="button" class="btn btn-danger" ng-click="delete()">Xóa ngay và luôn</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+<a ng-href="{{ link('admin/user/create') }}" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Tạo người dùng</a>
+<div class="alert alert-success" ng-if="messages.length">
+	<ul>
+		<li ng-repeat="message in messages">{{ message }}</li>
+	</ul>
+</div>
+<table class="table table-hover">
+	<thead>
+		<tr>
+			<td><a href ng-click="reverse('id')">#</a></td>
+			<td><a href ng-click="reverse('email')">Email</a></td>
+			<td><a href ng-click="reverse('level')">Level</a></td>
+			<td>Options</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="user in users | orderBy:orderBy:reverseData | filter:searchResults as results">
+			<td>{{ $index + 1 }}</td>
+			<td>{{ user.email }}</td>
+			<td>{{ getLevel(user.level) }}</td>
+			<td>
+				<a class="btn btn-warning" ng-href="{{ link('admin/user/') + user.id }}"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
+				<button class="btn btn-danger" type="button" ng-click="openModal(user)"><span class="glyphicon glyphicon-remove"></span> Delete</button>
+			</td>
+		</tr>
+		<tr ng-if="!users.length || !results.length">
+			<td colspan="4">Không có dữ liệu</td>
+		</tr>
+	</tbody>
+</table>
+<div ng-if="pagination" ng-bind-html="pagination" class="text-center"></div>
